@@ -4,12 +4,32 @@ import { Types } from 'mongoose';
 import { Customer } from '@/modules/customers/schemas/customer.schema';
 import { Specialist } from '@/modules/specialists/schemas/specialist.schema';
 import { BidStatusEnum } from '../types/bid';
+import { Transform } from 'class-transformer';
+
+export class BidBodyItem {
+  @Prop({ required: true })
+  local_id!: number;
+
+  @Prop({ required: true })
+  question!: string;
+
+  @Prop({ type: () => [String], required: true })
+  answer!: string[];
+
+  @Prop({
+    required: false,
+    default: '',
+  })
+  field: string;
+}
 
 @ModelOptions({
   schemaOptions: {
     collection: 'bids',
+    id: true,
     toObject: {
       virtuals: true,
+      versionKey: false,
       transform: (_doc: any, ret: any) => {
         delete ret._id;
         return ret;
@@ -22,10 +42,12 @@ import { BidStatusEnum } from '../types/bid';
   },
 })
 export class Bid extends BaseModel {
-  @Prop({ type: () => [Customer], ref: () => Customer, required: true })
+  @Transform(({ value }) => new Types.ObjectId(value))
+  @Prop({ type: () => Customer, ref: () => Customer, required: true })
   customer!: Ref<Customer | Types.ObjectId>;
 
-  @Prop({ type: () => [Specialist], ref: () => Specialist, required: false })
+  @Transform(({ value }) => new Types.ObjectId(value))
+  @Prop({ type: () => Specialist, ref: () => Specialist, required: false })
   specialist!: Ref<Specialist | Types.ObjectId>;
 
   @Prop({ type: () => [Specialist], ref: () => Specialist, required: false })
@@ -33,16 +55,13 @@ export class Bid extends BaseModel {
 
   @Prop({
     required: true,
-    type: () => [{ local_id: Number, question: String, answer: String }],
+    type: () => [BidBodyItem],
   })
-  body!: Array<{
-    local_id: number;
-    question: string;
-    answer: string;
-  }>;
+  body!: BidBodyItem[];
 
   @Prop({
-    required: true,
+    required: false,
+    default: '',
   })
   date!: string;
 

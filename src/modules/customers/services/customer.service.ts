@@ -1,4 +1,9 @@
-import { Inject, Injectable, LoggerService } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  LoggerService,
+  NotFoundException,
+} from '@nestjs/common';
 import { CustomerRepository } from '../repo/customer/repository';
 import { CustomerCreateDto, CustomerUpdateDto } from '../dtos/customer.dto';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -11,6 +16,15 @@ export class CustomerService {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {}
+
+  async getByChatId(chat_id: number) {
+    const customer = await this.customerRepo.getByChatId(chat_id);
+    if (!customer) {
+      throw new NotFoundException(`customer not found: ${chat_id}`);
+    }
+
+    return customer;
+  }
 
   async create(data: CustomerCreateDto) {
     try {

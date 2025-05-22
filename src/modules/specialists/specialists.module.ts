@@ -6,10 +6,11 @@ import { SpecialistRepository } from './repo/specialist/repository';
 import { MethodRepository } from './repo/method/repository';
 import { SpecialistService } from './services/specialist.service';
 import { MethodService } from './services/method.service';
+import { SpecialistController } from './controllers/specialist.controller';
 
 @Module({
   imports: [TypegooseModule.forFeature([Specialist, Method])],
-  controllers: [],
+  controllers: [SpecialistController],
   providers: [
     {
       provide: 'ISpecialistRepository',

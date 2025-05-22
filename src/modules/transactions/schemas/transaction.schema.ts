@@ -1,11 +1,15 @@
-import { ModelOptions, Prop, Ref } from '@typegoose/typegoose';
+import { ModelOptions, Prop, Ref, Severity } from '@typegoose/typegoose';
 import { BaseModel } from '@/core/schemas/base.model';
-import { Types } from 'mongoose';
+import { Mixed, Types } from 'mongoose';
 import { TransactionStatusEnum } from '../types/transaction';
 
 @ModelOptions({
+  options: {
+    allowMixed: Severity.ALLOW,
+  },
   schemaOptions: {
     collection: 'transactions',
+    id: true,
     toObject: {
       virtuals: true,
       transform: (_doc: any, ret: any) => {
@@ -46,5 +50,5 @@ export class Transaction extends BaseModel {
     required: true,
     default: [],
   })
-  callbacks!: any[];
+  callbacks!: Mixed[];
 }

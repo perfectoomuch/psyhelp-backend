@@ -8,6 +8,7 @@ import { Types } from 'mongoose';
     toObject: {
       virtuals: true,
       transform: (_doc: any, ret: any) => {
+        ret.id = ret._id?.toString(); // 👈 вручную добавляем id
         delete ret._id;
         return ret;
       },

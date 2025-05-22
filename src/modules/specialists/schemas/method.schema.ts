@@ -5,8 +5,10 @@ import { Types } from 'mongoose';
 @ModelOptions({
   schemaOptions: {
     collection: 'methods',
+    id: true,
     toObject: {
       virtuals: true,
+      versionKey: false,
       transform: (_doc: any, ret: any) => {
         delete ret._id;
         return ret;

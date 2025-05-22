@@ -4,14 +4,23 @@ import { Types } from 'mongoose';
 import { Method } from './method.schema';
 import dayjs from 'dayjs';
 import { CustomerExperienceRouteInterface } from '@/modules/customers/types/customer';
+import {
+  SpecialistEthnicEnum,
+  SpecialistProfessionEnum,
+  SpecialistReligionEnum,
+} from '../types/specialist';
+import { Exclude } from 'class-transformer';
 
 @ModelOptions({
   schemaOptions: {
     collection: 'specialists',
+    id: true,
     toObject: {
       virtuals: true,
+      versionKey: false,
       transform: (_doc: any, ret: any) => {
         delete ret._id;
+        delete ret.birth_year;
         return ret;
       },
     },
@@ -91,16 +100,28 @@ export class Specialist extends BaseModel {
 
   @Prop({
     required: true,
-    enum: ['psychologist', 'psychotherapist', 'coach'],
+    enum: SpecialistProfessionEnum,
   })
   profession!: string;
+
+  @Prop({
+    required: true,
+    enum: SpecialistReligionEnum,
+  })
+  religion!: string;
+
+  @Prop({
+    required: true,
+    enum: SpecialistEthnicEnum,
+  })
+  experience_ethnic_group: string;
 
   @Prop({
     required: true,
   })
   sessions!: number;
 
-  public age() {
+  public get age() {
     const currentYear = new Date().getFullYear();
     const docYear = this.birth_year;
 

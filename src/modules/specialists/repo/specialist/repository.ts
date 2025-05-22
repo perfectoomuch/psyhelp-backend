@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ISpecialistRepository } from './interface';
+import { ISpecialistRepository, MethodsPopulated } from './interface';
 import { InjectModel } from '@m8a/nestjs-typegoose';
 import { Specialist } from '../../schemas/specialist.schema';
 import { ReturnModelType } from '@typegoose/typegoose';
+import { log } from 'console';
+import { Method } from '../../schemas/method.schema';
 
 @Injectable()
 export class SpecialistRepository implements ISpecialistRepository {
@@ -11,10 +13,22 @@ export class SpecialistRepository implements ISpecialistRepository {
     private readonly model: ReturnModelType<typeof Specialist>,
   ) {}
 
-  async getAll(): Promise<Specialist[]> {
-    const list = await this.model.find().exec();
+  async getAll(select?: Record<string, number>): Promise<MethodsPopulated[]> {
+    const list = await this.model
+      .find()
+      .populate<{ methods: Method[] }>([
+        {
+          path: 'methods',
+          select: {
+            created_at: 0,
+            updated_at: 0,
+          },
+        },
+      ])
+      .select(select)
+      .exec();
     if (list.length === 0) return [];
-    const listObjected = list.map((el) => el.toObject());
+    const listObjected = list.map((el) => el.toObject({ virtuals: true }));
     return listObjected;
   }
 
