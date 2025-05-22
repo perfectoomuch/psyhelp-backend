@@ -12,6 +12,8 @@ import { CustomersModule } from './modules/customers/customers.module';
 import { SpecialistsModule } from './modules/specialists/specialists.module';
 import { UsersModule } from './modules/users/users.module';
 import { TelegramModule } from './modules/telegram/telegram.module';
+import { BidsModule } from './modules/bids/bids.module';
+import { TransactionsModule } from './modules/transactions/transactions.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { TelegramModule } from './modules/telegram/telegram.module';
     SpecialistsModule,
     UsersModule,
     TelegramModule,
+    BidsModule,
+    TransactionsModule,
   ],
   providers: [
     {
