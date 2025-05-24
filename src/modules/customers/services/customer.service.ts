@@ -19,6 +19,7 @@ export class CustomerService {
 
   async getByChatId(chat_id: number) {
     const customer = await this.customerRepo.getByChatId(chat_id);
+
     if (!customer) {
       throw new NotFoundException(`customer not found: ${chat_id}`);
     }

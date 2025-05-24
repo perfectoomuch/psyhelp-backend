@@ -14,5 +14,6 @@ export interface BidFormInterface {
 export interface BidCreateInterface {
   chat_id: number;
   specialist_id: string;
+  date: string;
   form: BidFormInterface[];
 }

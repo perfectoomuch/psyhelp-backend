@@ -33,6 +33,7 @@ export class CustomerRepository implements ICustomerRepository {
 
   async getByChatId(chat_id: number): Promise<Customer | null> {
     const customer = await this.model.findOne({ chat_id }).exec();
+    if (!customer) return null;
     return customer.toObject();
   }
 

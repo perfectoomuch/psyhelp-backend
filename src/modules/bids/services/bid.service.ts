@@ -55,6 +55,7 @@ export class BidService {
         plainToInstance(Bid, {
           customer: customer.id,
           specialist: data.specialist_id,
+          date: data.date,
           body: data.form,
         }),
       );

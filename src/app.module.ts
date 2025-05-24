@@ -14,9 +14,15 @@ import { UsersModule } from './modules/users/users.module';
 import { TelegramModule } from './modules/telegram/telegram.module';
 import { BidsModule } from './modules/bids/bids.module';
 import { TransactionsModule } from './modules/transactions/transactions.module';
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public', 'uploads'),
+      serveRoot: '/api/uploads',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,

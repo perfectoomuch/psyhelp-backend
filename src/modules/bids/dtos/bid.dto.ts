@@ -29,5 +29,8 @@ export class BidCreateDto extends BidBaseDto {
   @IsString()
   specialist_id: string;
 
+  @IsString()
+  date: string;
+
   form: BidFormDto[];
 }
